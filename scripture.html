@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Art of Existing</title>
+    <style>
+        :root {
+            --bg-color: #050505;
+            --text-color: #d1d1d1;
+            --accent-color: #c5a059; /* Muted Gold */
+            --highlight-color: #a8a8ff; /* Soft ethereal blue/purple */
+            --alert-color: #8a3b3b;
+            --font-main: 'Georgia', serif;
+            --font-ui: 'Courier New', monospace;
+        }
+
+        * {
+            box-sizing: border-box;
+            transition: all 0.3s ease;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: var(--font-main);
+            line-height: 1.6;
+            overflow-x: hidden;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Ambient Background Effect */
+        .ambient-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 50% 50%, #1a1a1a 0%, #000000 100%);
+            z-index: -1;
+            opacity: 0.8;
+        }
+
+        .container {
+            max-width: 800px;
+            width: 90%;
+            margin: 40px auto;
+            text-align: center;
+            position: relative;
+        }
+
+        h1, h2, h3 {
+            font-weight: normal;
+            letter-spacing: 2px;
+            color: var(--accent-color);
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            text-shadow: 0 0 10px rgba(197, 160, 89, 0.2);
+            animation: breathe 4s infinite ease-in-out;
+        }
+
+        @keyframes breathe {
+            0%, 100% { opacity: 0.8; text-shadow: 0 0 10px rgba(197, 160, 89, 0.2); }
+            50% { opacity: 1; text-shadow: 0 0 20px rgba(197, 160, 89, 0.4); }
+        }
+
+        /* Sections */
+        .section {
+            display: none; /* Hidden by default */
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        .section.active {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Homepage specific */
+        .welcome-text {
+            font-size: 1.1rem;
+            margin-bottom: 3rem;
+            font-family: var(--font-ui);
+            color: #888;
+        }
+
+        .policy-box {
+            border: 1px solid var(--alert-color);
+            padding: 20px;
+            margin: 30px auto;
+            border-radius: 4px;
+            background: rgba(138, 59, 59, 0.05);
+            max-width: 600px;
+        }
+
+        .policy-title {
+            color: var(--alert-color);
+            font-family: var(--font-ui);
+            font-weight: bold;
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+
+        /* Gatekeeper (Password) */
+        .gatekeeper {
+            margin-top: 40px;
+            padding: 30px;
+            border-top: 1px solid #222;
+        }
+
+        input[type="password"] {
+            background: transparent;
+            border: none;
+            border-bottom: 1px solid var(--text-color);
+            color: var(--accent-color);
+            font-family: var(--font-ui);
+            font-size: 1.2rem;
+            padding: 10px;
+            text-align: center;
+            width: 250px;
+            outline: none;
+        }
+
+        input[type="password"]:focus {
+            border-bottom: 1px solid var(--accent-color);
+        }
+
+        button {
+            background: transparent;
+            border: 1px solid var(--text-color);
+            color: var(--text-color);
+            padding: 10px 30px;
+            margin-top: 20px;
+            font-family: var(--font-ui);
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.8rem;
+        }
+
+        button:hover {
+            background: var(--text-color);
+            color: var(--bg-color);
+            border-color: var(--text-color);
+        }
+
+        .error-msg {
+            color: var(--alert-color);
+            font-family: var(--font-ui);
+            font-size: 0.8rem;
+            margin-top: 15px;
+            min-height: 20px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        /* Scripture Styling */
+        .scripture-container {
+            text-align: left;
+            padding-bottom: 100px;
+        }
+
+        .chapter-title {
+            font-size: 1.8rem;
+            margin-top: 4rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            border-bottom: 1px solid #222;
+            padding-bottom: 10px;
+            color: var(--highlight-color);
+        }
+
+        .verse {
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: baseline;
+        }
+
+        .verse-num {
+            font-family: var(--font-ui);
+            font-size: 0.75rem;
+            color: #555;
+            min-width: 50px;
+            text-align: right;
+            margin-right: 20px;
+            user-select: none;
+        }
+
+        .verse-text {
+            font-size: 1.05rem;
+            color: #d1d1d1;
+        }
+
+        .verse:hover .verse-text {
+            color: #fff;
+        }
+
+        .verse:hover .verse-num {
+            color: var(--accent-color);
+        }
+
+        .footer-note {
+            margin-top: 60px;
+            font-family: var(--font-ui);
+            font-size: 0.7rem;
+            color: #444;
+            text-align: center;
+            border-top: 1px solid #111;
+            padding-top: 20px;
+        }
+
+        /* Mobile specific */
+        @media (max-width: 600px) {
+            h1 { font-size: 1.8rem; }
+            .verse { flex-direction: column; }
+            .verse-num { text-align: left; margin-bottom: 5px; margin-right: 0; }
+            input[type="password"] { width: 100%; }
+        }
+
+        /* Loading fade */
+        #loader {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: #000;
+            z-index: 100;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #333;
+            font-family: var(--font-ui);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="ambient-bg"></div>
+
+    <div id="loader">Initializing...</div>
+
+    <!-- HOME SECTION -->
+    <div id="home-section" class="container section">
+        <h1>The Art of Existing</h1>
+        
+        <p class="welcome-text">
+            Welcome, traveler. You stand before the archives of the Spawnism Scripture.<br>
+            Here lies the written wisdom of the Eight-Tailed Circle.
+        </p>
+
+        <div class="policy-box">
+            <div class="policy-title">Strict Policy - Read Carefully</div>
+            <p style="font-size: 0.9rem; color: #aaa;">
+                This sanctuary is for the eyes of trusted Spawnists only.<br><br>
+                <strong>NEVER share this website link outside of official Spawnism servers.</strong><br>
+                Do not distribute the contents within to the uninitiated without guidance.
+            </p>
+        </div>
+
+        <div class="gatekeeper">
+            <p style="font-family: var(--font-ui); font-size: 0.8rem; margin-bottom: 15px;">PROVE YOUR FAITH</p>
+            <form id="login-form" onsubmit="checkPassword(event)">
+                <input type="password" id="password-input" placeholder="Passphrase" autocomplete="off">
+                <br>
+                <button type="submit">Enter Sanctuary</button>
+            </form>
+            <div id="error-msg" class="error-msg">The gate remains closed.</div>
+        </div>
+    </div>
+
+    <!-- SCRIPTURE SECTION -->
+    <div id="scripture-section" class="container section">
+        <h1 style="margin-bottom: 0.5rem;">The Scripture</h1>
+        <p style="font-family: var(--font-ui); font-size: 0.8rem; color: #666; margin-bottom: 40px;">
+            Read with an open heart.
+        </p>
+
+        <div class="scripture-container">
+            
+            <!-- Chapter 1 -->
+            <div class="chapter-title">Gratitude</div>
+            
+            <div class="verse"><span class="verse-num">1:1</span><span class="verse-text">Why shall we not dance in ecstasy at the Art of Existing?</span></div>
+            <div class="verse"><span class="verse-num">1:2</span><span class="verse-text">Existing can be thought of as the Gift of Spawn.</span></div>
+            <div class="verse"><span class="verse-num">1:3</span><span class="verse-text">The ruler of the Earth, the Sea, and the Skies.</span></div>
+            <div class="verse"><span class="verse-num">1:4</span><span class="verse-text">He who resurrects and bestows Infinite Gifts, the Great Healer.</span></div>
+            <div class="verse"><span class="verse-num">1:5</span><span class="verse-text">You mighty souls who are sad, rejoice!</span></div>
+            <div class="verse"><span class="verse-num">1:6</span><span class="verse-text">Let that which saddens you sadden you no longer!</span></div>
+            <div class="verse"><span class="verse-num">1:7</span><span class="verse-text">Feel infinite gratitude for the feel of sunlight on your skin!</span></div>
+            <div class="verse"><span class="verse-num">1:8</span><span class="verse-text">Be free, mighty souls!</span></div>
+            <div class="verse"><span class="verse-num">1:9</span><span class="verse-text">Don't hold onto all that passes, but be grateful for it as it comes.</span></div>
+            <div class="verse"><span class="verse-num">1:10</span><span class="verse-text">All is precious, and all is sacred.</span></div>
+            <div class="verse"><span class="verse-num">1:11</span><span class="verse-text">Notice your breath, and feel how precious it and all other things are.</span></div>
+
+            <!-- Chapter 2 -->
+            <div class="chapter-title">Noticing</div>
+
+            <div class="verse"><span class="verse-num">2:1</span><span class="verse-text">A person who notices all without judgment is the ruler of their own personal madness.</span></div>
+            <div class="verse"><span class="verse-num">2:2</span><span class="verse-text">Free your mind and heart, O mighty soul!</span></div>
+            <div class="verse"><span class="verse-num">2:3</span><span class="verse-text">Focus, but do not close everything else out.</span></div>
+            <div class="verse"><span class="verse-num">2:4</span><span class="verse-text">Become the receiver of the Infinite Gifts.</span></div>
+            <div class="verse"><span class="verse-num">2:5</span><span class="verse-text">Let your noticing be of both the inner and the outer, and you shall realize they are One.</span></div>
+            <div class="verse"><span class="verse-num">2:6</span><span class="verse-text">Through this Oneness, you shall realize all is connected.</span></div>
+            <div class="verse"><span class="verse-num">2:7</span><span class="verse-text">O mighty soul, know your kingdom and those that surround it!</span></div>
+            <div class="verse"><span class="verse-num">2:8</span><span class="verse-text">O mighty soul, let your prayer be done through the art of noticing!</span></div>
+            <div class="verse"><span class="verse-num">2:9</span><span class="verse-text">Decorate your mind with that of the eight-tailed circle, and notice it spinning within you.</span></div>
+            <div class="verse"><span class="verse-num">2:10</span><span class="verse-text">Notice the presence of Spawn channeled through the eight-tailed circle, and be the receiver of His Wisdom!</span></div>
+            <div class="verse"><span class="verse-num">2:11</span><span class="verse-text">Ready yourself, let your mind, heart, and body be clean, O mighty soul!</span></div>
+            <div class="verse"><span class="verse-num">2:12</span><span class="verse-text">If you are not clean while He is your guest, then He shall do it for you with His Holy Fire that is of the might of a thousand suns!</span></div>
+            <div class="verse"><span class="verse-num">2:13</span><span class="verse-text">Your mind and heart shall burn by His Fire, and your body shall be weak.</span></div>
+            <div class="verse"><span class="verse-num">2:14</span><span class="verse-text">Your vision will blur, and you will cry.</span></div>
+            <div class="verse"><span class="verse-num">2:15</span><span class="verse-text">Notice the cleansing, and understand that you will be unburdened after His Holy Fire hath cleansed you!</span></div>
+            <div class="verse"><span class="verse-num">2:16</span><span class="verse-text">His Holy Fire merely reveals so that you may notice, and that is how It shall burn you.</span></div>
+            <div class="verse"><span class="verse-num">2:17</span><span class="verse-text">O mighty soul, your poor heart is burdened with so much.</span></div>
+            <div class="verse"><span class="verse-num">2:18</span><span class="verse-text">Notice your burdens, and let them express themselves until they are weightless.</span></div>
+            <div class="verse"><span class="verse-num">2:19</span><span class="verse-text">O mighty soul, you are Pure Light.</span></div>
+            <div class="verse"><span class="verse-num">2:20</span><span class="verse-text">Do not let these burdens dim you, O mighty soul!</span></div>
+            <div class="verse"><span class="verse-num">2:21</span><span class="verse-text">Become the ruler of your kingdom, and notice all of that which restrains it.</span></div>
+            <div class="verse"><span class="verse-num">2:22</span><span class="verse-text">You shall be the ruler of your kingdom as Spawn is the ruler of His, the magnificent, beautiful World.</span></div>
+
+            <!-- Chapter 3 -->
+            <div class="chapter-title">Resurrection</div>
+
+            <div class="verse"><span class="verse-num">3:1</span><span class="verse-text">Those who have infinite gratitude for all of the Infinite Gifts, inner and outer, that they have learned to notice and thus appreciate, shall be resurrected.</span></div>
+            <div class="verse"><span class="verse-num">3:2</span><span class="verse-text">Your gratitude shall gravitate Life back towards you, and Life will love you for your enjoyment of Her!</span></div>
+            <div class="verse"><span class="verse-num">3:3</span><span class="verse-text">Death is merely rebirth, as all change is merely death, and all death is merely change.</span></div>
+            <div class="verse"><span class="verse-num">3:4</span><span class="verse-text">Understand that Spawn shall, in His Infinite Love, permit Life Herself to love you once more for your infinite gratitude!</span></div>
+            <div class="verse"><span class="verse-num">3:5</span><span class="verse-text">Those without infinite gratitude are often not resurrected, why would they be if they do not enjoy the Face and Personality of Life Herself?</span></div>
+            <div class="verse"><span class="verse-num">3:6</span><span class="verse-text">Those heretics who commit suicide in the name of Spawn, they will not be granted resurrection, for they merely squander the Beauty of Life Herself.</span></div>
+            <div class="verse"><span class="verse-num">3:7</span><span class="verse-text">Evil happens in the name of Spawn, even though He never asked you to do so!</span></div>
+            <div class="verse"><span class="verse-num">3:8</span><span class="verse-text">Love all for you all are One, and so do not squander or harm Life Herself!</span></div>
+            <div class="verse"><span class="verse-num">3:9</span><span class="verse-text">Be delicate with your kingdom, with your temple.</span></div>
+            <div class="verse"><span class="verse-num">3:10</span><span class="verse-text">Be delicate with others kingdoms too, with their temples, O mighty soul!</span></div>
+            <div class="verse"><span class="verse-num">3:11</span><span class="verse-text">You are pure art.</span></div>
+            <div class="verse"><span class="verse-num">3:12</span><span class="verse-text">Because you are pure art, and you are delicate with your kingdom and others kingdoms, and you have infinite gratitude for all of His Infinite Gifts, you shall live to be seen as art once more!</span></div>
+            <div class="verse"><span class="verse-num">3:13</span><span class="verse-text">Fathom your power as pure art, O mighty soul!</span></div>
+            <div class="verse"><span class="verse-num">3:14</span><span class="verse-text">Understand that the whole World is circles upon circles, and circles are the image of cycles, rebirth, resurrection, O mighty soul!</span></div>
+            <div class="verse"><span class="verse-num">3:15</span><span class="verse-text">The weight of your heart may drag you down too far for Life Herself to pull you back up, let it be weightless!</span></div>
+            <div class="verse"><span class="verse-num">3:16</span><span class="verse-text">Understand that they who do not call Divinity by Spawn still deserve resurrection!</span></div>
+            <div class="verse"><span class="verse-num">3:17</span><span class="verse-text">O mighty soul, understand that in all faith there is the same Eternal Truth!</span></div>
+            <div class="verse"><span class="verse-num">3:18</span><span class="verse-text">The Christians, the Luciferians, the Muslims, the Judaists, the Buddhists, the Hindus, the Taoists, ad infinitum, all know the same Eternal Truth!</span></div>
+            <div class="verse"><span class="verse-num">3:19</span><span class="verse-text">You are all equal, do not fight each other, transcend your tribalism.</span></div>
+            <div class="verse"><span class="verse-num">3:20</span><span class="verse-text">The way you, O mighty soul, choose to dance with Divinity is your choice!</span></div>
+            <div class="verse"><span class="verse-num">3:21</span><span class="verse-text">If you deserve resurrection, you will be given it, the way you earn it does not matter.</span></div>
+            <div class="verse"><span class="verse-num">3:22</span><span class="verse-text">In your own personal madness is the key to escaping it and unburdening your heart, so that you may see clearly and transcend your doubt of resurrection!</span></div>
+            <div class="verse"><span class="verse-num">3:23</span><span class="verse-text">The day that resurrection is achieved within the age of technology and science is the day that faith will be understood as both, and thus the age of technology and science shall end.</span></div>
+            <div class="verse"><span class="verse-num">3:24</span><span class="verse-text">To be resurrected, you must have authority over yourself through your noticing and your infinite gratitude, be the god of your own being, O mighty soul.</span></div>
+            <div class="verse"><span class="verse-num">3:25</span><span class="verse-text">Understand that Divinity is your equal, for your godhood over your being makes you so.</span></div>
+            <div class="verse"><span class="verse-num">3:26</span><span class="verse-text">However, one is not deserving of resurrection if you try to be the god of other mighty souls, let them be their own gods unto themselves!</span></div>
+            <div class="verse"><span class="verse-num">3:27</span><span class="verse-text">Understand that he who writes these words is not Spawn, and so these words are not Divinity.</span></div>
+            <div class="verse"><span class="verse-num">3:28</span><span class="verse-text">However, you shall also understand that these imperfect words carry the message of Spawn, and so their meaning is Divinity, even if the words themselves are not.</span></div>
+            <div class="verse"><span class="verse-num">3:29</span><span class="verse-text">I have experienced infinite gratitude and I have experienced noticing, and praised Divinity as my equal, and so I carry the message of Spawn, even if not His exact words.</span></div>
+            <div class="verse"><span class="verse-num">3:30</span><span class="verse-text">Understand that I work towards resurrection, and understand that I have faith in all forms of the same Eternal Truth.</span></div>
+            <div class="verse"><span class="verse-num">3:31</span><span class="verse-text">Understand that I walk among you, and am equal to you.</span></div>
+            <div class="verse"><span class="verse-num">3:32</span><span class="verse-text">Understand that I am no better, nor am I no worse, yet I am simultaneously flawed, as you are, too.</span></div>
+            <div class="verse"><span class="verse-num">3:33</span><span class="verse-text">And so ends the imperfect transmutation of the Perfect Message of Resurrection into words.</span></div>
+
+        </div>
+
+        <div class="footer-note">
+            Last Updated: November 23, 2025<br>
+            United as One.
+        </div>
+    </div>
+
+    <script>
+        
+        window.onload = function() {
+            setTimeout(() => {
+                document.getElementById('loader').style.opacity = '0';
+                setTimeout(() => {
+                    document.getElementById('loader').style.display = 'none';
+                    document.getElementById('home-section').classList.add('active');
+                }, 800);
+            }, 1500);
+        };
+
+        function checkPassword(event) {
+            event.preventDefault();
+            const input = document.getElementById('password-input');
+            const errorMsg = document.getElementById('error-msg');
+            const homeSection = document.getElementById('home-section');
+            const scriptureSection = document.getElementById('scripture-section');
+
+            if (input.value === "United as One") {
+                errorMsg.style.opacity = '0';
+                // Transition effect
+                homeSection.style.opacity = '0';
+                homeSection.style.transform = 'translateY(-20px)';
+                
+                setTimeout(() => {
+                    homeSection.style.display = 'none';
+                    scriptureSection.classList.add('active');
+                    window.scrollTo(0, 0);
+                }, 800);
+            } else {
+                errorMsg.innerText = "The gate remains closed.";
+                errorMsg.style.opacity = '1';
+                // Shake effect
+                input.style.transform = 'translateX(10px)';
+                setTimeout(() => { input.style.transform = 'translateX(-10px)'; }, 100);
+                setTimeout(() => { input.style.transform = 'translateX(10px)'; }, 200);
+                setTimeout(() => { input.style.transform = 'translateX(0)'; }, 300);
+            }
+        }
+    </script>
+</body>
+</html>
